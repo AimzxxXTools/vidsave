@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#090b10">
+  <title>DarkGlass Downloader</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{color-scheme:dark;--bg:#090b10;--panel:rgba(20,23,32,.72);--line:rgba(255,255,255,.095);--muted:#9ba3b5;--text:#f5f7ff;--accent:#a78bfa;--accent2:#6d5dfc;--good:#77e0b5;--bad:#ff8e9a}
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    html{min-height:100%;scroll-behavior:smooth;scroll-padding-top:90px;overscroll-behavior-y:contain}
+    body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 15% 0%,rgba(109,93,252,.16),transparent 38%),radial-gradient(ellipse at 95% 22%,rgba(68,161,255,.10),transparent 30%),var(--bg);color:var(--text);font-family:"DM Sans",system-ui,sans-serif;overflow-x:hidden;overscroll-behavior-x:none}
+    body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);background-size:44px 44px;mask-image:linear-gradient(to bottom,black,transparent 85%)}
+    button,input,select{font:inherit}button{touch-action:manipulation;cursor:pointer}button:focus:not(:focus-visible),input:focus:not(:focus-visible),select:focus:not(:focus-visible){outline:none}button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+    a{color:inherit;text-decoration:none}.wrap{width:min(1120px,calc(100% - 36px));margin:auto}
+    header{height:76px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.055)}
+    .brand{display:flex;align-items:center;gap:11px;font:700 18px "Space Grotesk",sans-serif;letter-spacing:-.5px}.brand-mark{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(135deg,#b9a4ff,#6655f4);color:#090b10;box-shadow:0 5px 28px #7660ff45}
+    .brand small{display:block;color:var(--muted);font:500 10px "DM Sans",sans-serif;letter-spacing:1.5px;margin-top:2px}
+    .pill{border:1px solid var(--line);background:rgba(255,255,255,.035);padding:8px 12px;border-radius:999px;color:#d9d8ff;font-size:12px;display:flex;align-items:center;gap:7px}
+    .dot{width:7px;height:7px;border-radius:50%;background:var(--good);box-shadow:0 0 10px #77e0b580}
+    .hero{text-align:center;padding:62px 0 34px}.eyebrow{display:inline-flex;align-items:center;gap:8px;border:1px solid #a78bfa38;background:#a78bfa0d;color:#c8baff;border-radius:999px;padding:7px 12px;font-size:11px;font-weight:700;letter-spacing:1.3px;text-transform:uppercase}
+    h1{font:700 clamp(34px,6vw,62px)/1.04 "Space Grotesk",sans-serif;letter-spacing:-2.5px;margin:22px 0 15px}.gradient{background:linear-gradient(100deg,#fff 12%,#c5b5ff 48%,#8ccfff 88%);-webkit-background-clip:text;background-clip:text;color:transparent}
+    .hero p{max-width:620px;margin:0 auto;color:var(--muted);line-height:1.7;font-size:15px}
+    .main-card{max-width:850px;margin:0 auto;background:linear-gradient(145deg,rgba(255,255,255,.075),rgba(255,255,255,.025));border:1px solid rgba(255,255,255,.12);border-radius:25px;padding:20px;box-shadow:0 25px 90px #0007,inset 0 1px rgba(255,255,255,.08);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px)}
+    .platform-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}.section-label{font-size:12px;font-weight:700;color:#e3e4f1}.hint{font-size:11px;color:var(--muted)}
+    .platforms{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:9px;margin-bottom:20px}
+    .platform{min-width:0;border:1px solid var(--line);border-radius:14px;padding:12px 5px 10px;background:rgba(7,9,15,.45);color:#c9ceda;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;transition:background .2s,border-color .2s,transform .2s}
+    .platform:hover{transform:translateY(-2px);border-color:#a78bfa66}.platform.active{border-color:#a78bfa;background:linear-gradient(145deg,#a78bfa24,#6d5dfc10);color:#fff;box-shadow:inset 0 0 0 1px #a78bfa12}
+    .platform .ico{width:30px;height:30px;border-radius:10px;background:rgba(255,255,255,.075);display:grid;place-items:center;font-size:16px;font-weight:700}.platform span:last-child{font-size:11px;font-weight:600}
+    .input-row{display:flex;gap:10px;padding:7px;background:rgba(4,6,11,.56);border:1px solid var(--line);border-radius:16px}
+    .url-wrap{flex:1;min-width:0;display:flex;align-items:center;gap:10px;padding:0 10px}.url-wrap svg{flex-shrink:0;color:#a7a0d9}.url-wrap input{width:100%;min-width:0;border:0;outline:none;background:transparent;color:#fff;padding:12px 0;font-size:14px}.url-wrap input::placeholder{color:#737b8d}
+    .primary{border:0;border-radius:12px;padding:0 20px;min-height:46px;background:linear-gradient(135deg,#b6a1ff,#7866ff 65%,#6253ed);color:#090b12;font-weight:800;font-size:13px;box-shadow:0 6px 22px #7866ff38;transition:filter .2s,transform .2s}.primary:hover{filter:brightness(1.08)}.primary:active{transform:scale(.98)}.primary:disabled{opacity:.55;cursor:wait}
+    .under-row{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:12px 3px 0;color:#8e96a8;font-size:11px}.secure{display:flex;align-items:center;gap:6px}
+    .status{display:none;margin-top:16px;border:1px solid var(--line);background:#090b10a6;border-radius:14px;padding:15px;color:#c9cfde;font-size:13px;line-height:1.55;overflow-wrap:anywhere}.status.show{display:block}.status.error{border-color:#ff8e9a55;color:#ffc3ca}.status.success{border-color:#77e0b555}
+    .result{display:none;margin-top:16px;border:1px solid var(--line);background:rgba(6,8,14,.52);border-radius:18px;padding:14px;gap:15px}.result.show{display:grid;grid-template-columns:128px minmax(0,1fr)}.thumb{width:128px;aspect-ratio:16/10;border-radius:12px;object-fit:cover;background:#171b27}.result-title{font-weight:700;font-size:15px;line-height:1.45;overflow-wrap:anywhere}.meta{display:flex;gap:7px;flex-wrap:wrap;margin:9px 0 13px}.tag{border:1px solid var(--line);background:#ffffff08;color:#bfc5d4;border-radius:7px;padding:5px 8px;font-size:10px}
+    .resource-list{display:grid;gap:8px}.resource{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid var(--line);border-radius:12px;padding:10px;background:#ffffff04}.resource-info{min-width:0}.resource-info strong{display:block;font-size:12px}.resource-info small{display:block;color:var(--muted);font-size:10px;margin-top:4px}.download{flex-shrink:0;border:1px solid #a78bfa55;background:#a78bfa16;color:#d9d0ff;border-radius:9px;padding:9px 11px;font-size:11px;font-weight:700}.download:hover{background:#a78bfa2a}
+    .features{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:30px auto 0}.feature{padding:19px;border:1px solid var(--line);border-radius:17px;background:rgba(255,255,255,.025)}.feature-icon{width:35px;height:35px;display:grid;place-items:center;border-radius:11px;background:#a78bfa15;color:#c8baff;margin-bottom:13px}.feature h3{font-size:13px;margin:0 0 7px}.feature p{font-size:12px;line-height:1.65;color:var(--muted);margin:0}
+    .notice{margin:25px auto 0;max-width:850px;padding:13px 15px;border:1px solid #f1c77a24;background:#f1c77a08;border-radius:13px;color:#b9b4a8;font-size:11px;line-height:1.6}.notice strong{color:#ead6a8}
+    footer{padding:32px 0 25px;text-align:center;color:#687184;font-size:11px}.footer-brand{color:#c5c9d5;font-weight:700;margin-bottom:7px}
+    .spin{width:14px;height:14px;border:2px solid #17152e55;border-top-color:#17152e;border-radius:50%;display:inline-block;vertical-align:middle;animation:spin .7s linear infinite;margin-right:7px}@keyframes spin{to{transform:rotate(360deg)}}
+    @media(max-width:700px){.wrap{width:min(100% - 24px,560px)}header{height:66px}.hero{padding:44px 0 27px}h1{letter-spacing:-1.5px}.hero p{font-size:13px}.main-card{padding:14px;border-radius:20px}.platforms{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.platform{flex-direction:row;justify-content:flex-start;padding:10px 12px}.platform .ico{width:29px;height:29px}.platform span:last-child{font-size:12px}.input-row{flex-direction:column;background:transparent;border:0;padding:0;gap:9px}.url-wrap{border:1px solid var(--line);background:#05070c99;border-radius:12px;padding:0 12px;min-height:48px}.primary{width:100%;min-height:47px}.under-row{margin-top:10px}.result.show{grid-template-columns:90px minmax(0,1fr);gap:11px;padding:10px}.thumb{width:90px}.features{grid-template-columns:1fr;gap:9px;margin-top:20px}.feature{display:flex;gap:12px;padding:14px}.feature-icon{flex-shrink:0;margin:0}.feature h3{margin-top:2px}.notice{font-size:10px}.resource{align-items:flex-start}.download{padding:9px}.brand{font-size:16px}.pill{font-size:10px;padding:7px 9px}}
+    @media(max-width:360px){.wrap{width:calc(100% - 18px)}.brand small{letter-spacing:1px}.platform{padding:9px 8px}.platform span:last-child{font-size:11px}.result.show{grid-template-columns:1fr}.thumb{width:100%;max-height:180px;aspect-ratio:16/8}.under-row{font-size:10px}}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
+  </style>
+</head>
+<body>
+  <header class="wrap">
+    <a class="brand" href="#" aria-label="DarkGlass Downloader">
+      <span class="brand-mark">D<span style="font-size:11px">G</span></span>
+      <span>DARKGLASS<small>MEDIA DOWNLOADER</small></span>
+    </a>
+    <div class="pill"><span class="dot"></span> <span>Simple · Fast · Clean</span></div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <div class="eyebrow"><span>✦</span> All your media in one place</div>
+      <h1>Save what you<br><span class="gradient">want to watch.</span></h1>
+      <p>Tempel tautan media, pilih platform, lalu lihat pilihan media yang berhasil dideteksi. Semua dalam satu tampilan DarkGlass yang ringan.</p>
+    </section>
+
+    <section class="main-card" aria-label="Media downloader">
+      <div class="platform-head"><span class="section-label">PILIH PLATFORM</span><span class="hint">Pilih sesuai link kamu</span></div>
+      <div class="platforms" id="platforms">
+        <button class="platform active" data-platform="tiktok" type="button"><span class="ico">♪</span><span>TikTok</span></button>
+        <button class="platform" data-platform="instagram" type="button"><span class="ico">◎</span><span>Instagram</span></button>
+        <button class="platform" data-platform="youtube" type="button"><span class="ico">▶</span><span>YouTube</span></button>
+        <button class="platform" data-platform="facebook" type="button"><span class="ico">f</span><span>Facebook</span></button>
+        <button class="platform" data-platform="x" type="button"><span class="ico">𝕏</span><span>X / Twitter</span></button>
+        <button class="platform" data-platform="pinterest" type="button"><span class="ico">p</span><span>Pinterest</span></button>
+      </div>
+      <div class="input-row">
+        <label class="url-wrap">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M10 13.5a5 5 0 0 0 7.07 0l3-3A5 5 0 0 0 13 3.43l-1.72 1.72M14 10.5a5 5 0 0 0-7.07 0l-3 3A5 5 0 0 0 11 20.57l1.72-1.72" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+          <input id="urlInput" type="url" inputmode="url" autocomplete="url" placeholder="Tempel link TikTok di sini..." aria-label="URL media">
+        </label>
+        <button id="parseBtn" class="primary" type="button">Cari Media <span aria-hidden="true">↗</span></button>
+      </div>
+      <div class="under-row"><span id="platformHint">Platform dipilih: TikTok</span><span class="secure">◇ Proses melalui backend kamu</span></div>
+      <div id="status" class="status" role="status" aria-live="polite"></div>
+      <section id="result" class="result" aria-label="Hasil media">
+        <img id="thumbnail" class="thumb" alt="Thumbnail media" hidden>
+        <div>
+          <div id="resultTitle" class="result-title">Hasil media</div>
+          <div id="meta" class="meta"></div>
+          <div id="resources" class="resource-list"></div>
+        </div>
+      </section>
+    </section>
+
+    <section class="features" aria-label="Fitur">
+      <article class="feature"><div class="feature-icon">↧</div><div><h3>Pilihan media</h3><p>Menampilkan resource video atau audio yang benar-benar dikirim API, termasuk kualitas, format, dan ukuran jika tersedia.</p></div></article>
+      <article class="feature"><div class="feature-icon">◈</div><div><h3>DarkGlass UI</h3><p>Panel kaca gelap dengan aksen ungu, tata letak adaptif, dan tombol yang nyaman disentuh pada layar kecil.</p></div></article>
+      <article class="feature"><div class="feature-icon">▣</div><div><h3>Responsif</h3><p>Grid platform menyesuaikan ukuran layar, tidak memaksa halaman melebar, dan memperhatikan pengurangan animasi.</p></div></article>
+    </section>
+
+    <div class="notice"><strong>Catatan:</strong> daftar platform di atas adalah pilihan antarmuka, bukan jaminan dukungan API. Jika Vidssave menolak URL tertentu, hasil akan menampilkan pesan error dari backend. Gunakan hanya untuk media yang boleh kamu unduh dan akses.</div>
+  </main>
+
+  <footer class="wrap"><div class="footer-brand">DARKGLASS DOWNLOADER</div><div>Interface demo · Backend Node.js diperlukan</div></footer>
+
+  <script>
+    const $ = (s) => document.querySelector(s);
+    const platformNames = {tiktok:"TikTok",instagram:"Instagram",youtube:"YouTube",facebook:"Facebook",x:"X / Twitter",pinterest:"Pinterest"};
+    let activePlatform = "tiktok";
+    let lastParsed = null;
+
+    document.querySelectorAll(".platform").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".platform").forEach(el => el.classList.toggle("active", el === btn));
+        activePlatform = btn.dataset.platform;
+        $("#platformHint").textContent = "Platform dipilih: " + platformNames[activePlatform];
+        $("#urlInput").placeholder = "Tempel link " + platformNames[activePlatform] + " di sini...";
+      });
+    });
+
+    function setStatus(message, type="") {
+      const el = $("#status");
+      el.className = "status show " + type;
+      el.textContent = message;
+    }
+    function formatSize(size) {
+      if (size === undefined || size === null || size === "") return "";
+      if (typeof size === "number" && size > 0) {
+        const units = ["B","KB","MB","GB"]; let n=size, i=0;
+        while(n>=1024 && i<units.length-1){n/=1024;i++}
+        return n.toFixed(i===0?0:1)+" "+units[i];
+      }
+      return String(size);
+    }
+    function safeHttpUrl(value) {
+      try { const u = new URL(value); return ["http:","https:"].includes(u.protocol) ? u.href : ""; } catch { return ""; }
+    }
+    function makeTag(text) {
+      const span = document.createElement("span"); span.className="tag"; span.textContent=text; return span;
+    }
+    function showResult(data) {
+      lastParsed = data;
+      $("#result").classList.add("show");
+      const thumb = $("#thumbnail");
+      const thumbUrl = safeHttpUrl(data.thumbnail || "");
+      if (thumbUrl) { thumb.src=thumbUrl; thumb.hidden=false; thumb.onerror=()=>{thumb.hidden=true}; }
+      else { thumb.hidden=true; thumb.removeAttribute("src"); }
+      $("#resultTitle").textContent = data.title || "Media berhasil diproses";
+      const meta=$("#meta"); meta.replaceChildren();
+      if (data.duration) meta.append(makeTag("Durasi: "+data.duration));
+      meta.append(makeTag((data.resources || []).length+" resource"));
+      const list=$("#resources"); list.replaceChildren();
+      (data.resources || []).forEach((r,index)=>{
+        const row=document.createElement("div"); row.className="resource";
+        const info=document.createElement("div"); info.className="resource-info";
+        const strong=document.createElement("strong");
+        strong.textContent=[r.quality,r.type,r.format].filter(Boolean).join(" · ") || ("Resource "+(index+1));
+        const small=document.createElement("small");
+        small.textContent=[formatSize(r.size),r.resource_id ? "ID: "+r.resource_id : ""].filter(Boolean).join(" · ") || "Media tersedia";
+        info.append(strong,small);
+        const button=document.createElement("button"); button.type="button"; button.className="download"; button.textContent="Siapkan ↓";
+        button.addEventListener("click",()=>resolveResource(r,button));
+        row.append(info,button); list.append(row);
+      });
+      if (!(data.resources || []).length) setStatus("Media terdeteksi, tetapi API tidak mengembalikan resource unduhan.", "error");
+      else setStatus("Berhasil membaca media. Pilih resource yang ingin disiapkan.", "success");
+    }
+    async function parseMedia() {
+      const raw=$("#urlInput").value.trim();
+      if (!raw) { setStatus("Masukkan URL media terlebih dahulu.", "error"); $("#urlInput").focus(); return; }
+      let url;
+      try { url=new URL(raw); if(!["http:","https:"].includes(url.protocol)) throw new Error(); }
+      catch { setStatus("URL tidak valid. Gunakan tautan lengkap yang diawali https://", "error"); return; }
+      const btn=$("#parseBtn"); btn.disabled=true; btn.innerHTML='<span class="spin"></span>Memproses...';
+      $("#result").classList.remove("show");
+      setStatus("Sedang meminta informasi media ke backend...");
+      try {
+        const res=await fetch("/api/parse",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({url:url.href,platform:activePlatform})});
+        const json=await res.json().catch(()=>({}));
+        if(!res.ok || json.status!==true) throw new Error(json.error || json.message || "Gagal memproses URL.");
+        showResult(json.data || json);
+      } catch(err) {
+        setStatus((err.message || "Terjadi kesalahan.")+" Pastikan server Node.js berjalan dan API Vidssave mendukung URL ini.", "error");
+      } finally { btn.disabled=false; btn.innerHTML='Cari Media <span aria-hidden="true">↗</span>'; }
+    }
+    async function resolveResource(resource, button) {
+      if (!lastParsed) return;
+      const old=button.textContent; button.disabled=true; button.textContent="Menyiapkan...";
+      try {
+        const res=await fetch("/api/download",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({url:$("#urlInput").value.trim(),resourceContent:resource.resource_content,quality:resource.quality,type:resource.type,format:resource.format})});
+        const json=await res.json().catch(()=>({}));
+        if(!res.ok || json.status!==true) throw new Error(json.error || "Gagal menyiapkan download.");
+        const href=safeHttpUrl(json.data?.direct_url || json.data?.download_link);
+        if(!href) throw new Error("API tidak mengembalikan URL unduhan yang valid.");
+        const a=document.createElement("a"); a.href=href; a.target="_blank"; a.rel="noopener noreferrer"; a.download=""; document.body.appendChild(a); a.click(); a.remove();
+        button.textContent="Buka link ↗";
+        setStatus("Link unduhan siap. Jika file tidak langsung tersimpan, ikuti halaman unduhan yang terbuka.", "success");
+      } catch(err) {
+        setStatus((err.message || "Terjadi kesalahan saat menyiapkan unduhan."), "error");
+        button.textContent=old;
+      } finally { button.disabled=false; }
+    }
+    $("#parseBtn").addEventListener("click",parseMedia);
+    $("#urlInput").addEventListener("keydown",e=>{if(e.key==="Enter")parseMedia()});
+  </script>
+</body>
+<
