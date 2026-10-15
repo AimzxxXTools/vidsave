@@ -1,0 +1,13 @@
+{
+  "name": "vidssave-darkglass-kitzxyaping",
+  "version": "1.0.0",
+  "description": "Website Downloader & Media Search dengan tema DarkGlass oleh Kitzxyaping",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
+  }
+}
